@@ -68,6 +68,17 @@ public class DataSeeder implements CommandLineRunner {
                     .className("5th Standard")
                     .build());
         }
+
+        if (!userRepository.existsByUsername("falakata@emphathai.com")) {
+            userRepository.save(User.builder()
+                    .username("falakata@emphathai.com")
+                    .password(passwordEncoder.encode("falakata1234"))
+                    .role(Role.SCHOOL_ADMIN)
+                    .school("FALAKATA")
+                    .build());
+            System.out.println("✅ Falakata School Admin created");
+        }
+
         System.out.println("✅ Sample students created");
     }
 }

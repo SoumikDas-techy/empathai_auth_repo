@@ -17,7 +17,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     public LoginResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByUsername(request.getUsername())  //roll and school
+
                 .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -25,18 +26,11 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
-        return new LoginResponse(token, user.getRole().name(), user.getUsername());
+        return new LoginResponse(
+                token,
+                user.getRole().name(),
+                user.getUsername(),
+                user.getSchool()
+        );
     }
-
-    public void resetStudentPassword(Long studentId, String newPassword) {
-        User student = userRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-
-        if (student.getRole() != Role.STUDENT) {
-            throw new RuntimeException("Can only reset password for students");
-        }
-
-        student.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(student);
     }
-}

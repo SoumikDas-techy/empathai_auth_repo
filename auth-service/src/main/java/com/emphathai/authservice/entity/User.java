@@ -49,4 +49,10 @@ public class User {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 }
