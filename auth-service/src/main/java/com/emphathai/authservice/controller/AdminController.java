@@ -63,6 +63,17 @@ public class AdminController {
         return ResponseEntity.ok("Password reset successfully");
     }
 
+    @PutMapping("/students/{id}/update-name")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_SCHOOL_ADMIN')")
+    public ResponseEntity<String> updateStudentName(@PathVariable Long id,
+                                                    @RequestBody UpdateNameRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        user.setUsername(request.getFullName());
+        userRepository.save(user);
+        return ResponseEntity.ok("Name updated!");
+    }
+
     @DeleteMapping("/students/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_SCHOOL_ADMIN')")
     public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
@@ -107,6 +118,17 @@ public class AdminController {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
         return ResponseEntity.ok("Password reset!");
+    }
+
+    @PutMapping("/school-admins/{id}/update-name")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<String> updateSchoolAdminName(@PathVariable Long id,
+                                                        @RequestBody UpdateNameRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        user.setUsername(request.getFullName());
+        userRepository.save(user);
+        return ResponseEntity.ok("Name updated!");
     }
 
     @DeleteMapping("/school-admins/{id}")
@@ -157,6 +179,17 @@ public class AdminController {
         return ResponseEntity.ok("Password reset!");
     }
 
+    @PutMapping("/psychologists/{id}/update-name")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<String> updatePsychologistName(@PathVariable Long id,
+                                                         @RequestBody UpdateNameRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        user.setFullName(request.getFullName());
+        userRepository.save(user);
+        return ResponseEntity.ok("Name updated!");
+    }
+
     @DeleteMapping("/psychologists/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<String> deletePsychologist(@PathVariable Long id) {
@@ -203,6 +236,17 @@ public class AdminController {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
         return ResponseEntity.ok("Password reset!");
+    }
+
+    @PutMapping("/content-admins/{id}/update-name")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<String> updateContentAdminName(@PathVariable Long id,
+                                                         @RequestBody UpdateNameRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+        user.setFullName(request.getFullName());
+        userRepository.save(user);
+        return ResponseEntity.ok("Name updated!");
     }
 
     @DeleteMapping("/content-admins/{id}")
@@ -262,5 +306,10 @@ public class AdminController {
         private String password;
         private String fullName;
         private String phoneNumber;
+    }
+
+    @Data
+    public static class UpdateNameRequest {
+        private String fullName;
     }
 }
