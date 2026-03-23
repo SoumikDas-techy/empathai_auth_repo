@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Sensitive config files - NEVER push to GitHub
+src/main/resources/application-local.properties
+
+# Environment files
+.env
+.env.local
+.env.production
